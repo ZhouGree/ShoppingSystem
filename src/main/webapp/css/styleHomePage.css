@@ -1,0 +1,421 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    text-decoration: none;
+    font-family: 黑体;
+}
+
+/* 字体图标引用 */
+@font-face {
+    font-family: 'icomoon';
+    src: url('fonts/icomoon.eot?a5ern');
+    src: url('fonts/icomoon.eot?a5ern#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?a5ern') format('truetype'),
+    url('fonts/icomoon.woff?a5ern') format('woff'),
+    url('fonts/icomoon.svg?a5ern#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+/* 背景设置 */
+.bg {
+    width: 1520px;
+    height: 2270px;
+}
+/* 顶部栏设置 */
+.top {
+    height: 33px;
+    font-size: 11px;
+    padding-left: 290px;
+    line-height: 33px;
+    background-color: #F5F5F5;
+    overflow:hidden;
+}
+
+.top-l {
+    float: left;
+    margin-left: 20px;
+}
+
+.top-r ul{
+    float:right;
+    margin-right: 300px;
+}
+
+.top-r ul li {
+    float: left;
+    margin-right: 15px;
+}
+
+.top-r span {
+    font-family: 'icomoon';
+    font-size: 10px;
+    color: #808080;
+}
+.top-r span:hover{
+    color:#F03726;
+}
+.top a {
+    color: gray;
+}
+
+.top a:hover {
+    color: #FF0000;
+}
+/* 天猫超市一站式购齐 */
+.top-x {
+    width: 1520px;
+    height: 80px;
+    background-color: #4ad2aa;
+}
+
+.top-x img {
+    display: block;
+    width: 1070px;
+    height: 80px;
+    margin: 0 auto;
+}
+/* 搜索栏 */
+input {
+    float: left;
+    width: 530px;
+    height: 30px;
+    margin-left: 30px;
+    margin-top: 2px;
+    border: 2.5px solid #FF0000;
+    border-right: none;
+    outline: none;
+}
+
+button {
+    float: left;
+    width: 70px;
+    height: 35px;
+    margin-left: 930px;
+    margin-top: -73px;
+    font-size: 14px;
+    border: 0;
+    right: 2px;
+    background: #f03726;
+}
+
+button a {
+    color: white;
+}
+
+.sousuo {
+    float: left;
+    width: 1020px;
+    height: 75px;
+    margin: 20px 0px 0px 230px;
+}
+.sousuo img{
+    float:left;
+    width:170px;
+    height:75px;
+}
+.sousuo ul {
+    float: left;
+    margin: 5px 0px 0px 30px;
+}
+
+.sousuo ul li {
+    float: left;
+    padding-right: 12px;
+    font-size: 14px;
+}
+
+.sousuo a {
+    color:#808080;
+}
+
+.sousuo a:hover {
+    text-decoration: underline;
+    color: #f03726;
+}
+
+.sousuo a:active {
+    border: 1px dashed #F03726;
+}
+/* 每日爆品 */
+.daily {
+    width: 1520px;
+    height: 30px;
+    margin-top: 120px;
+    background-color: #f03726;
+}
+
+.daily a {
+    color: #FFFFFF;
+}
+
+.daily ul {
+    margin-left: 225px;
+}
+
+.daily ul li {
+    float: left;
+    padding-right: 50px;
+    font-size: 14px;
+    line-height: 30px;
+}
+/* 商品种类 */
+.xia-l {
+    width: 235px;
+    height: 480px;
+    font-size: 22px;
+    margin-left: 225px;
+    border-color: #F03726;
+    border-style: solid;
+    border-width: 0px 1px 1px;
+    background-color: white;
+    overflow: hidden;
+}
+.xia-l img{
+    width:28px;
+    margin:5px;
+}
+.xia-l table {
+    width: 236px;
+    height: 15px;
+    padding: 9px 0px 12px 50px;
+    margin: -60px 0px 8px 0px;
+    line-height: 14px;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.xia-l table:hover {
+    background-color: #F5F5F5;
+}
+
+.xia-l a {
+    color: #808080;
+}
+
+.xia-l a:hover {
+    color: #FF0000;
+}
+
+.xia-l table td {
+    padding-right: 5px;
+    font-size: 12px;
+}
+.xia-l .color{
+    color:#F03726;
+}
+.banner {
+    float: left;
+    width: 605px;
+    height: 243px;
+    margin: -481px 0px 0px 470px;
+}
+
+.banner .big img{
+    width:465px;
+    height:243px;
+}
+.banner .small img{
+    float:left;
+    width:125px;
+    height:243px;
+    margin:-247px 0px 0px 477px;
+}
+/* 我的淘宝 */
+.my {
+    float: right;
+    width: 208px;
+    height: 238px;
+    margin: -480px 224px 0px 0px;
+    border: 1px solid #F5F5F5;
+    text-align:center;
+}
+.my table{
+    width:100%;
+    height:100%;
+    border-collapse: collapse;
+}
+.my span{
+    font-size:14px;
+    color:#F03726;
+}
+.my .star{
+    width:21px;
+    vertical-align:bottom;
+}
+.my img{
+    width:70px;
+}
+/* 超值活动专区 */
+.chaozhi {
+    float: left;
+    width: 465px;
+    height: 26px;
+    margin: -230px 0px 0px 470px;
+    color: #F03726;
+    font-size: 13px;
+    border-bottom: 2px solid #F03726;
+}
+
+.chaozhi p{
+    float:left;
+    margin-top:5px;
+    color:#A9A9A9;
+}
+.chaozhi em{
+    float:right;
+    margin-top:5px;
+    font-style:normal;
+}
+.fashion {
+    float: left;
+    width: 465px;
+    height: 190px;
+    margin: -190px 0px 0px 470px;
+}
+
+.fashion img{
+    float:left;
+    width:230px;
+    height:190px;
+}
+.station{
+    position:absolute;
+    right:440px;
+    bottom:-11px;
+    width:130px;
+}
+.station img{
+    width:130px;
+    height:221px;
+}
+.yizhanshi {
+    position: relative;
+    float: right;
+    width: 208px;
+    height: 221px;
+    margin: -220px 224px 0px 0px;
+    border: 1px solid #F5F5F5;
+}
+.yizhanshi img{
+    float:left;
+    height:15px;
+    margin:-1px 5px 10px 7px;
+}
+.yizhanshi p{
+    float:left;
+    margin-top:5px;
+    font-size:10px;
+}
+.yizhanshi em{
+    font-style:normal;
+}
+.yizhanshi a {
+    color: #808080;
+}
+
+.yizhanshi a:hover {
+    color: #F03726;
+}
+/* 商品展示区 */
+.like {
+    width: 1072px;
+    margin: 25px auto;
+}
+
+.like h3 {
+    margin-bottom: 5px;
+    font-family: 幼圆;
+    font-size: 15px;
+    color: #F03726;
+}
+
+.tuijian1,.tuijian2 {
+    position: relative;
+    float: right;
+    width: 212px;
+    height: 330px;
+    margin-left: -1px;
+    border: 1px solid #F5F5F5;
+}
+
+.tuijian1:hover,
+.tuijian2:hover{
+    z-index: 1;
+    border-color: #F03726;
+}
+.tuijian1 img,
+.tuijian2 img{
+    width:180px;
+    height:285px;
+    margin:17px;
+    border-bottom:1px solid #f5f5f5;
+}
+.tuijian1 p{
+    font-size:13px;
+    color:#A9A9A9;
+}
+.tuijian2 img{
+    width:175px;
+    height:285px;
+    margin:19px;
+}
+.tuijian2 p{
+    margin:-18px 0px 0px 127px;
+    font-size:13px;
+    color:#A9A9A9;
+}
+.number {
+    position: relative;
+    top: -100px;
+    text-align: center;
+}
+
+.number a {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    color: #fff;
+    background-color: #F03726;
+    text-align: center;
+    text-decoration: none;
+    border: 1px solid #F03726;
+}
+
+.number .main {
+    border: 1px solid #F03726;
+    background-color: #fff;
+    color: #000;
+}
+/* 底栏 */
+.footer {
+    position: relative;
+    width: 1072px;
+    height: 180px;
+    margin: 0 auto;
+    font-size: 12px;
+}
+
+.footer p {
+    float: left;
+    margin-left: 15px;
+    line-height: 20px;
+}
+
+.footer p,
+a {
+    color:#808080;
+}
+
+.symbol {
+    position: absolute;
+    top: 60px;
+    left: 10px;
+    width: 150px;
+}
+
+.symbol img {
+    width: 30px;
+}
