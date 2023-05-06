@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>store</title>
+    <style>
+        .el-header, .el-footer {
+            background-color: #B3C0D1;
+            color: #333;
+            text-align: center;
+            line-height: 60px;
+        }
+
+        .el-main {
+            background-color: #E9EEF3;
+            color: #333;
+            text-align: center;
+            line-height: 160px;
+        }
+
+        body > .el-container {
+            margin-bottom: 40px;
+        }
+
+        .el-container:nth-child(5) .el-aside,
+        .el-container:nth-child(6) .el-aside {
+            line-height: 260px;
+        }
+
+        .el-container:nth-child(7) .el-aside {
+            line-height: 320px;
+        }
+
+        .demo-table-expand {
+            font-size: 0;
+        }
+        .demo-table-expand label {
+            width: 90px;
+            color: #99a9bf;
+        }
+        .demo-table-expand .el-form-item {
+            margin-right: 0;
+            margin-bottom: 0;
+            width: 50%;
+        }
+    </style>
+</head>
+
+<body>
+<div id="app" >
+    <el-container>
+        <el-header>
+            <el-descriptions class="margin-top" title="" :column="4" :size="size">
+            <el-descriptions-item label="店铺名">{{storeData.storename}}</el-descriptions-item>
+            <el-descriptions-item label="评分">{{storeData.score}}</el-descriptions-item>
+            <el-descriptions-item label="月销量">{{storeData.sales}}</el-descriptions-item>
+            <el-descriptions-item label="描述信息">{{storeData.description}}</el-descriptions-item>
+        </el-descriptions>
+            </template>
+        </el-header>
+        <el-main>
+            <el-dialog title="投诉信息" :visible.sync="dialogFormVisible">
+                <el-form :model="form">
+                    <el-form-item label="用户名" :label-width="formLabelWidth">
+                        <el-input v-model="form.username" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="商品名" :label-width="formLabelWidth">
+                        <el-input v-model="form.commodityname" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="描述信息" :label-width="formLabelWidth">
+                        <el-input v-model="form.description" autocomplete="off"></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+                    <el-button type="primary" >确 定</el-button>
+                </div>
+            </el-dialog>
+            <template>
+                <el-table
+                        :data="tableData"
+                        style="width: 100%">
+                    <el-table-column type="expand">
+                        <template slot-scope="props">
+                            <el-form label-position="left" @click="ShowComment(props.row.id)" inline class="demo-table-expand">
+                                <el-form-item label="用户id">
+                                    <span>{{ commentData.mainuser_id}}</span>
+                                </el-form-item>
+                                <el-form-item label="comment">
+                                    <span>{{commentData.comment }}</span>
+                                </el-form-item>
+                            </el-form>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            label="商品 ID"
+                            prop="id">
+                    </el-table-column>
+                    <el-table-column
+                            label="商品图片"
+                            prop="picture">
+                    </el-table-column>
+                    <el-table-column
+                            label="商品名称"
+                            prop="commodityname">
+                    </el-table-column>
+                    <el-table-column
+                            label="销量"
+                            prop="sales">
+                    </el-table-column>
+                    <el-table-column
+                            label="repertory"
+                            prop="库存">
+                    </el-table-column>
+                    <el-table-column
+                            label="价格"
+                            prop="price">
+                    </el-table-column>
+                    <el-table-column
+                            label="描述"
+                            prop="description">
+                    </el-table-column>
+
+                    <el-table-column
+                            prop="operation"
+                            align="center"
+                            label="操作"
+                    >
+                        <template slot-scope="scope">
+                            <el-row>
+                                <el-button type="warning" plain @click="cart(scope.row.id)">添加进购物车</el-button>
+                                <el-button type="danger" plain  @click="dialogFormVisible = true">投诉</el-button>
+                            </el-row>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </template>
+
+        </el-main>
+    </el-container>
+</div>
+
+<script src = "js/axios.js"></script>
+<script src = "element/vue.js"></script>
+<script src="element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+
+
+<script>
+    new Vue({
+        mounted(){
+            this.ShowStore();
+            // this.ShowCommodity();
+            // this.ShowComment(this.props.row.id);
+        },
+        el: "#app",
+        methods: {
+            ShowComment(id){
+                var _this = this;
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/ShoppingSystem/store/QueryAllCommodity",
+                    data:id
+                }).then(function (respone) {
+                    if( respone.data.flag===true){
+                        _this.commentData = respone.data.data;
+                    }else {
+                        alert("操作失败，请稍后重试！")
+                    }
+                })
+            },
+            ShowStore() {
+                var _this = this;
+                axios({
+                    method:"get",
+                    url:"http://localhost:8080/ShoppingSystem/store/showStore",
+                }).then(function (respone) {
+                    if( respone.data.flag===true){
+                        _this.storeData = respone.data.data;
+                        _this.ShowCommodity(_this.storeData.id);
+                    }else {
+                        alert("操作失败，请稍后重试！")
+                    }
+                })
+            },
+            ShowCommodity(id){
+                var _this = this;
+                _this.SetId.id = id
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/ShoppingSystem/store/QueryAllCommodity",
+                    data:_this.SetId
+                }).then(function (respone) {
+                    if( respone.data.flag === true){
+                        _this.tableData = respone.data.data;
+                        this.ShowComment(this.props.row.id);
+                    }else {
+                        alert("操作失败，请稍后重试！")
+                    }
+                })
+            },
+            cart(id){
+                var _this=this;
+                _this.CartData.storing_id = id;
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/ShoppingSystem/cart/AddCart",
+                    data:_this.CartData
+                }).then(function (respone) {
+                    if(respone.data.flag === true){
+                        alert("添加成功")
+                    }else {
+                        alert("若已登录，请稍后重试！")
+                    }
+                })
+            },
+            form(){
+                var _this = this;
+                axios({
+                    method: "post",
+                    url:"http://localhost:8080/ShoppingSystem/TipOff/tipOff",
+                    data: _this.form
+                }).then(function (respone) {
+                    if(respone.data.flag === true){
+                        alert("举报信息已发至审理人，结果会稍后通知！")
+                    }else {
+                        alert("操作失败，请稍后重试！")
+                    }
+                })
+            },
+        },
+        data() {
+            return {
+                dialogTableVisible: false,
+                dialogFormVisible: false,
+                tableData:{
+                    id:"",
+                    picture:"",
+                    commodityname:"",
+                    sales:"",
+                    repertory:"",
+                    price:"",
+                    description:""
+                },
+                commentData:{
+                    mainuser_id:"",
+                    comment:""
+                },
+                storeData:{
+                    id:"",
+                    storename:"",
+                    score:"",
+                    sales:"",
+                    description:""
+                },
+                SetId:{
+                    id:""
+                },
+                CartData:{
+                    storing_id:''
+                },
+            }
+        }
+    })
+
+</script>
+</body>
+</html>

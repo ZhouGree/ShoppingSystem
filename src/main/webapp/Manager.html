@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manager</title>
+    <style>
+        .el-header, .el-footer {
+            background-color: #B3C0D1;
+            color: #333;
+            text-align: center;
+            line-height: 60px;
+        }
+        .el-aside {
+            background-color: #D3DCE6;
+            color: #333;
+            text-align: center;
+            line-height: 200px;
+        }
+
+        .el-main {
+            background-color: #E9EEF3;
+            color: #333;
+            text-align: center;
+            line-height: 160px;
+        }
+
+        body > .el-container {
+            margin-bottom: 40px;
+        }
+
+        .el-container:nth-child(5) .el-aside,
+        .el-container:nth-child(6) .el-aside {
+            line-height: 260px;
+        }
+
+        .el-container:nth-child(7) .el-aside {
+            line-height: 320px;
+        }
+    </style>
+</head>
+<body>
+<div id="app" >
+    <el-container>
+        <el-aside width="200px">
+            <template>
+            <div class="demo-type">
+                <div>
+                    <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                </div>
+
+            </div>
+        </template>
+        </el-aside>
+        <el-container>
+            <el-header>
+                <el-row>
+                <el-button type="primary" plain @click="logout" style='position: absolute;right:120px;top:5px;'>退出登录</el-button>
+                <el-button type="primary" plain @click="logoff" style='position: absolute;right:10px;top:5px;'>注销账号</el-button>
+            </el-row>
+            </el-header>
+            <el-main>
+                <keep-alive>
+                    <template>
+                        <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+                            <el-tab-pane label="商品上新" name="first" >
+                                <template slot-scope="scope">
+                                    <el-table
+                                            ref="multipleTable"
+                                            :data="NewCommodityData"
+                                            tooltip-effect="dark"
+                                            style="width: 100%"
+                                            @selection-change="handleSelectionChange">
+                                        <el-table-column
+                                                type="selection"
+                                                width="55">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="id"
+                                                label="id"
+                                                width="120">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="picture"
+                                                label="图片"
+                                                width="120">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="commodityname"
+                                                label="商品名称"
+                                                width="120">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="storename"
+                                                label="店铺名称"
+                                                width="120">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="price"
+                                                label="价格"
+                                                width="120">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="description"
+                                                label="详情"
+                                                show-overflow-tooltip>
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="operation"
+                                                align="center"
+                                                label="操作"
+                                        >
+                                            <el-row>
+                                                <el-button type="warning" plain @click="SetCommodity(scope.row.id)">同意</el-button>
+                                                <el-button type="danger" plain  @click="deleteCommodity(scope.row.id)">删除</el-button>
+                                            </el-row>
+                                        </el-table-column>
+                                    </el-table>
+                                    <div style="margin-top: 20px">
+                                        <el-button @click="toggleSelection()">取消选择</el-button>
+                                    </div>
+                                </template>
+                            </el-tab-pane>
+                            <el-tab-pane label="店铺上新" name="second"  >
+                                <template slot-scope="scope">
+                                    <el-table
+                                            ref="multipleTable"
+                                            :data="storeData"
+                                            tooltip-effect="dark"
+                                            style="width: 100%"
+                                            @selection-change="handleSelectionChange"
+                                    >
+                                        <el-table-column
+                                                type="selection"
+                                                width="55">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="id"
+                                                label="id"
+                                                width="120">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="storename"
+                                                label="店铺姓名"
+                                                width="120">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="mainuser_id"
+                                                label="申请人id"
+                                                width="120">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="description"
+                                                label="详情"
+                                                show-overflow-tooltip>
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="operation"
+                                                align="center"
+                                                label="操作"
+                                        >
+                                            <el-row>
+                                                <el-button type="warning" plain @click="SetStore(scope.row.id)">同意</el-button>
+                                                <el-button type="danger" plain   @click="deleteStore(scope.row.id)">删除</el-button>
+                                            </el-row>
+                                        </el-table-column>
+                                    </el-table>
+                                    <div style="margin-top: 20px">
+                                        <el-button @click="toggleSelection()">取消选择</el-button>
+                                    </div>
+                                </template>
+                            </el-tab-pane>
+                            <el-tab-pane label="举报信息" name="third" >
+                                <template slot-scope="scope">
+                                    <el-table
+                                            ref="multipleTable"
+                                            :data="TipOffData"
+                                            tooltip-effect="dark"
+                                            style="width: 100%"
+                                            @selection-change="handleSelectionChange">
+                                        <el-table-column
+                                                type="selection"
+                                                width="55">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="id"
+                                                label="id"
+                                                width="120">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="mainuser_id"
+                                                label="举报人id"
+                                                width="120">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="commodity_id"
+                                                label="商品id"
+                                                width="120">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="description"
+                                                label="详情"
+                                                show-overflow-tooltip>
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="operation"
+                                                align="center"
+                                                label="操作"
+                                        >
+                                            <el-row>
+                                                <el-button type="warning" plain @click="SetTipOff(scope.row.id)" >同意</el-button>
+                                                <el-button type="danger" plain @click="SetTipOff(scope.row.id)">删除</el-button>
+                                            </el-row>
+                                        </el-table-column>
+                                    </el-table>
+                                    <div style="margin-top: 20px">
+                                        <el-button @click="toggleSelection()">取消选择</el-button>
+                                    </div>
+                                </template>
+                            </el-tab-pane>
+                        </el-tabs>
+                    </template>
+                </keep-alive>
+
+            </el-main>
+        </el-container>
+    </el-container>
+
+
+</div>
+
+<script src = "js/axios.js"></script>
+<script src = "element/vue.js"></script>
+<script src="element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+<script>
+    new Vue({
+        mounted(){
+            this.NewCommodity();
+            setTimeout(function () {
+                this.NewStore();
+            },2000);
+            setTimeout(function () {
+                this.TipOff();
+            },2000);
+
+        },
+        el: "#app",
+
+        methods: {
+            NewCommodity(){
+                var _this=this;
+                axios({
+                    method:"get",
+                    url:"http://localhost:8080/ShoppingSystem/Manager/ShowCommodity",
+                }).then(function (respone) {
+                    if(respone.data.flag === true){
+                        _this.NewCommodityData = respone.data.data
+                    }else {
+                        alert("重试！")
+                    }
+                })
+            },
+            NewStore(){
+                var _this=this;
+                axios({
+                    method:"get",
+                    url:"http://localhost:8080/ShoppingSystem/Manager/ShowStore",
+                }).then(function (respone) {
+                    if(respone.data.flag === true){
+                        _this.storeData = respone.data.data
+                    }else {
+                        alert("重试！")
+                    }
+                })
+            },
+            TipOff(){
+                var _this=this;
+                axios({
+                    method:"get",
+                    url:"http://localhost:8080/ShoppingSystem/Manager/ShowComplaint",
+                }).then(function (respone) {
+                    if(respone.data.flag === true){
+                        _this.TipOffData = respone.data.data
+                    }else {
+                        alert("重试！")
+                    }
+                })
+            },
+            handleClick(tab, event) {
+                console.log(tab, event);
+                if(this.activeName === "second"){
+                   this.NewStore();
+                }else if(this.activeName === "third"){
+                    this.TipOff();
+                }
+            },
+            toggleSelection(rows) {
+                if (rows) {
+                    rows.forEach(row => {
+                        this.$refs.multipleTable.toggleRowSelection(row);
+                    });
+                } else {
+                    this.$refs.multipleTable.clearSelection();
+                }
+            },
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+            },
+            logout(){
+                axios({
+                    method:"get",
+                    url:"http://localhost:8080/ShoppingSystem/user/logout",
+                    data:''
+                }).then(function () {
+                    setTimeout(function () {
+                        location.href="index.html"
+                    },1000)
+                })
+            },
+            logoff() {
+                axios({
+                    method:"get",
+                    url:"http://localhost:8080/ShoppingSystem/user/Logoff",
+                    data:''
+                }).then(function () {
+                    setTimeout(function () {
+                        location.href="index.html"
+                    },1000)
+                })
+            },
+            SetCommodity(id){
+                var _this = this;
+                _this.SetData.id=id;
+                _this.SetData.status = 0;
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/ShoppingSystem/Manager/CheckCommodity",
+                    data:_this.SetData
+                }).then(function (respone) {
+                    if(respone.data.flag === true){
+                        alert("成功！")
+                    }else {
+                        alert("重试！")
+                    }
+                })
+            },
+            SetStore(id){
+                var _this = this;
+                _this.SetData.id=id;
+                _this.SetData.status = 0;
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/ShoppingSystem/Manager/CheckStore",
+                    data:_this.SetData
+                }).then(function (respone) {
+                    if(respone.data.flag === true){
+                       alert("成功！")
+                    }else {
+                        alert("重试！")
+                    }
+                })
+            },
+            SetTipOff(id){
+                var _this = this;
+                _this.SetData.id=id;
+                _this.SetData.status = 0;
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/ShoppingSystem/Manager/Complaint",
+                    data:_this.SetData
+                }).then(function (respone) {
+                    if(respone.data.flag === true){
+                        alert("成功！")
+                    }else {
+                        alert("重试！")
+                    }
+                })
+            },
+            deleteCommodity(id){
+                var _this = this;
+                _this.SetData.id=id;
+                _this.SetData.status = 2;
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/ShoppingSystem/Manager/CheckCommodity",
+                    data:_this.SetData
+                }).then(function (respone) {
+                    if(respone.data.flag === true){
+                        alert("成功！")
+                    }else {
+                        alert("重试！")
+                    }
+                })
+            },
+            deleteStore(id){
+                var _this = this;
+                _this.SetData.id=id;
+                _this.SetData.status = 2;
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/ShoppingSystem/Manager/CheckStore",
+                    data:_this.SetData
+                }).then(function (respone) {
+                    if(respone.data.flag === true){
+                        alert("成功！")
+                    }else {
+                        alert("重试！")
+                    }
+                })
+            },
+
+        },
+        data() {
+            return {
+                activeName: 'first',
+                storeData: {
+                    id:"",
+                    storename : "",
+                    mainuser_id : "",
+                    description: ""
+                },
+                TipOffData: {
+                    id:"",
+                    mainuser_id: "",
+                    commodity_id: "",
+                    description: ""
+                },
+                NewCommodityData:{
+                    id:"",
+                    picture:"",
+                    commodityname:"",
+                    storename:"",
+                    description:"",
+                    price:""
+                },
+                SetData:{
+                    id:"",
+                    status:""
+                }
+            }
+
+        }
+    })
+
+</script>
+</body>
+</html>

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PageHome</title>
+    <style>
+        .el-table .warning-row {
+            background: oldlace;
+        }
+
+        .el-table .success-row {
+            background: #f0f9eb;
+        }
+
+         .el-header, .el-footer {
+             background-color: #B3C0D1;
+             color: #333;
+             text-align: center;
+             line-height: 60px;
+         }
+        .el-main {
+            background-color: #E9EEF3;
+            color: #333;
+            text-align: center;
+            line-height: 160px;
+        }
+
+        body > .el-container {
+            margin-bottom: 40px;
+        }
+
+        .el-container:nth-child(5) .el-aside,
+        .el-container:nth-child(6) .el-aside {
+            line-height: 260px;
+        }
+
+        .el-container:nth-child(7) .el-aside {
+            line-height: 320px;
+        }
+        .demo-table-expand {
+            font-size: 0;
+        }
+        .demo-table-expand label {
+            width: 90px;
+            color: #99a9bf;
+        }
+        .demo-table-expand .el-form-item {
+            margin-right: 0;
+            margin-bottom: 0;
+            width: 50%;
+        }
+    </style>
+</head>
+
+<body>
+<div id="app" >
+    <template>
+        <el-table
+                :data="orderData"
+                height="250"
+                border
+                style="width: 100%">
+            <el-table-column
+                    prop="id"
+                    align="center"
+                    label="商品id"
+                    width="50">
+            </el-table-column>
+            <el-table-column
+                    prop="commodityimage"
+                    align="center"
+                    label="商品图片"
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="commodityname"
+                    align="center"
+                    label="商品名称"
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="price"
+                    align="center"
+                    label="商品价格"
+                    width="60">
+            </el-table-column>
+            <el-table-column
+                    prop="storename"
+                    align="center"
+                    label="店家"
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="status"
+                    align="center"
+                    label="状态"
+                    width="60">
+            </el-table-column>
+            <el-table-column
+                    prop="operation"
+                    align="center"
+                    label="操作"
+            >
+                <template slot-scope="scope">
+                    <el-row>
+                        <el-link type="info" href="http://localhost:8080/ShoppingSystem/store.html">信息链接</el-link>
+                        <el-button type="danger" plain  @click="delete">删除</el-button>
+                    </el-row>
+                </template>
+
+            </el-table-column>
+        </el-table>
+    </template>
+    <template>
+        <el-table
+                :data="cartData"
+                height="250"
+                border
+                style="width: 100%">
+            <el-table-column
+                    prop="id"
+                    align="center"
+                    label="商品id"
+                    width="50">
+            </el-table-column>
+            <el-table-column
+                    prop="commodityimage"
+                    align="center"
+                    label="商品图片"
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="commodityname"
+                    align="center"
+                    label="商品名称"
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="price"
+                    align="center"
+                    label="商品价格"
+                    width="60">
+            </el-table-column>
+            <el-table-column
+                    prop="storename"
+                    align="center"
+                    label="店家"
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="operation"
+                    align="center"
+                    label="操作"
+            >
+                <template slot-scope="scope">
+                    <el-row>
+                        <el-link type="info" href="http://localhost:8080/ShoppingSystem/store.html">信息链接</el-link>
+                        <el-button type="danger" plain  @click="delete">删除</el-button>
+                        <el-button type="danger" plain  @click="buy(scope.row.id)">立即购买</el-button>
+                    </el-row>
+                </template>
+
+            </el-table-column>
+        </el-table>
+    </template>
+    <template>
+        <el-table
+                :data="storeData"
+                height="250"
+                border
+                style="width: 100%">
+            <el-table-column
+                    prop="id"
+                    align="center"
+                    label="商品id"
+                    width="50">
+            </el-table-column>
+            <el-table-column
+                    prop="commodityimage"
+                    align="center"
+                    label="商品图片"
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="commodityname"
+                    align="center"
+                    label="商品名称"
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="price"
+                    align="center"
+                    label="商品价格"
+                    width="60">
+            </el-table-column>
+            <el-table-column
+                    prop="description"
+                    align="center"
+                    label="详情"
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="repertory"
+                    align="center"
+                    label="库存"
+                    width="60">
+            </el-table-column>
+            <el-table-column
+                    prop="operation"
+                    align="center"
+                    label="操作"
+            >
+                <template slot-scope="scope">
+                    <el-row>
+                        <el-button type="danger" plain  @click="edit">修改</el-button>
+                        <el-button type="danger" plain  @click="delete">删除</el-button>
+                        <el-button type="danger" plain  @click="insert">添加</el-button>、
+                        <el-button type="danger" plain  @click="deliver">发货</el-button>
+                    </el-row>
+                </template>
+
+            </el-table-column>
+        </el-table>
+    </template>
+    <el-container>
+        <el-header>
+            <!--        头像-->
+            <div class="demo-type">
+                    <div>
+                        <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                        <el-row>
+                            <el-button type="primary" plain @click="login" style='position: absolute;right:100px;top:5px;'>登录</el-button>
+                            <el-button type="primary" plain @click="register" style='position: absolute;right:10px;top:5px;'>注册</el-button>
+                        </el-row>
+                    </div>
+
+
+                </el-row>
+            </div>
+        </el-header>
+        <el-main>
+            <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+            <el-form :model="form">
+                <el-form-item label="活动名称" :label-width="formLabelWidth">
+                    <el-input v-model="form.name" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="活动区域" :label-width="formLabelWidth">
+                    <el-select v-model="form.region" placeholder="请选择活动区域">
+                        <el-option label="区域一" value="shanghai"></el-option>
+                        <el-option label="区域二" value="beijing"></el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" >确 定</el-button>
+            </div>
+        </el-dialog>
+            <!--    表单-->
+            <el-form :inline="true" :model="formInline" class="demo-form-inline">
+                <el-form-item label="">
+                    <el-select v-model="formInline.region" placeholder="商品/店铺">
+                        <el-option label="商品" value="commodity"></el-option>
+                        <el-option label="店铺" value="store"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="">
+                    <el-input v-model="formInline.user" placeholder="搜索"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="onSubmit">查询</el-button>
+                </el-form-item>
+            </el-form>
+
+            <template>
+                <el-tabs v-model="activeName" @tab-click="handleClick">
+                    <el-tab-pane label="商品" name="first">
+                            <!--        表格-->
+                            <template>
+                                <el-table
+                                        :data="tableData"
+                                        style="width: 100%">
+                                    <el-table-column type="expand">
+                                        <template slot-scope="props">
+                                            <el-form label-position="left" inline class="demo-table-expand">
+                                                <el-form-item label="商品名称">
+                                                    <span>{{ props.row.name }}</span>
+                                                </el-form-item>
+                                                <el-form-item label="所属店铺">
+                                                    <span>{{ props.row.shop }}</span>
+                                                </el-form-item>
+                                                <el-form-item label="商品 ID">
+                                                    <span>{{ props.row.id }}</span>
+                                                </el-form-item>
+                                                <el-form-item label="店铺 ID">
+                                                    <span>{{ props.row.shopId }}</span>
+                                                </el-form-item>
+                                                <el-form-item label="商品分类">
+                                                    <span>{{ props.row.category }}</span>
+                                                </el-form-item>
+                                                <el-form-item label="店铺地址">
+                                                    <span>{{ props.row.address }}</span>
+                                                </el-form-item>
+                                                <el-form-item label="商品描述">
+                                                    <span>{{ props.row.desc }}</span>
+                                                </el-form-item>
+                                            </el-form>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column
+                                            label="商品 ID"
+                                            prop="id">
+                                    </el-table-column>
+                                    <el-table-column
+                                            label="商品名称"
+                                            prop="name">
+                                    </el-table-column>
+                                    <el-table-column
+                                            label="描述"
+                                            prop="desc">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="operation"
+                                            align="center"
+                                            label="操作"
+                                    >
+                                        <el-row>
+                                            <el-button type="warning" plain>添加进购物车</el-button>
+                                            <el-button type="danger" plain  @click="dialogFormVisible = true">投诉</el-button>
+                                        </el-row>
+                                    </el-table-column>
+                                </el-table>
+                            </template>
+                    </el-tab-pane>
+                    <el-tab-pane label="店铺" name="second">
+                            <!--        表格-->
+                            <template>
+                                <el-table
+                                        :data="tableData"
+                                        style="width: 100%">
+                                    <el-table-column type="expand">
+                                        <template slot-scope="props">
+                                            <el-form label-position="left" inline class="demo-table-expand">
+                                                <el-form-item label="商品名称">
+                                                    <span>{{ props.row.name }}</span>
+                                                </el-form-item>
+                                                <el-form-item label="所属店铺">
+                                                    <span>{{ props.row.shop }}</span>
+                                                </el-form-item>
+                                                <el-form-item label="商品 ID">
+                                                    <span>{{ props.row.id }}</span>
+                                                </el-form-item>
+                                                <el-form-item label="店铺 ID">
+                                                    <span>{{ props.row.shopId }}</span>
+                                                </el-form-item>
+                                                <el-form-item label="商品分类">
+                                                    <span>{{ props.row.category }}</span>
+                                                </el-form-item>
+                                                <el-form-item label="店铺地址">
+                                                    <span>{{ props.row.address }}</span>
+                                                </el-form-item>
+                                                <el-form-item label="商品描述">
+                                                    <span>{{ props.row.desc }}</span>
+                                                </el-form-item>
+                                            </el-form>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column
+                                            label="商品 ID"
+                                            prop="id">
+                                    </el-table-column>
+                                    <el-table-column
+                                            label="商品名称"
+                                            prop="name">
+                                    </el-table-column>
+                                    <el-table-column
+                                            label="描述"
+                                            prop="desc">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="operation"
+                                            align="center"
+                                            label="操作"
+                                    >
+                                        <el-row>
+                                            <el-button type="warning" plain>添加进购物车</el-button>
+                                            <el-button type="danger" plain  @click="dialogFormVisible = true">投诉</el-button>
+                                        </el-row>
+                                    </el-table-column>
+                                </el-table>
+                            </template>
+                    </el-tab-pane>
+                </el-tabs>
+            </template>
+
+
+            <div class="block">
+                <span class="demonstration"></span>
+                <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="currentPage4"
+                        :page-sizes="[5, 10, 15, 20]"
+                        :page-size="100"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="400">
+                </el-pagination>
+            </div>
+            </template>
+        </el-main>
+    </el-container>
+
+
+
+</div>
+<script src = "js/axios.js"></script>
+<script src = "element/vue.js"></script>
+<script src="element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+
+
+
+<script>
+    new Vue({
+        el: "#app",
+        mounted(){
+            this.ShowCommodity();
+        },
+
+        methods: {
+            handleClick(tab, event) {
+                console.log(tab, event);
+            },
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+            },
+            ShowCommodity(){
+                var _this=this;
+                axios({
+                    method: "get",
+                    url:"http://localhost:8080/ShoppingSystem/pageHome/showCommodity"
+                }).then(function (respone) {
+
+                    console.log(respone.data)
+                    _this.tableData = respone.data.data;
+                })
+            },
+
+            onSubmit() {
+                console.log('submit!');
+            },
+            tableRowClassName({row, rowIndex}) {
+                if (rowIndex === 1) {
+                    return 'warning-row';
+                } else if (rowIndex === 3) {
+                    return 'success-row';
+                }
+                return '';
+            },
+            login(){
+                location.href="login2.html"
+            },
+            register(){
+                location.href="register2.html"
+            }
+        },
+        data() {
+            return {
+                activeName: 'first',
+                currentPage4: 4,
+                circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+                sizeList: ["medium"],
+                tableData: [{
+                    id: '12987122',
+                    name: '好滋好味鸡蛋仔',
+                    category: '江浙小吃、小吃零食',
+                    desc: '荷兰优质淡奶，奶香浓而不腻',
+                    address: '上海市普陀区真北路',
+                    shop: '王小虎夫妻店',
+                    shopId: '10333'
+                }, {
+                    id: '12987123',
+                    name: '好滋好味鸡蛋仔',
+                    category: '江浙小吃、小吃零食',
+                    desc: '荷兰优质淡奶，奶香浓而不腻',
+                    address: '上海市普陀区真北路',
+                    shop: '王小虎夫妻店',
+                    shopId: '10333'
+                }, {
+                    id: '12987125',
+                    name: '好滋好味鸡蛋仔',
+                    category: '江浙小吃、小吃零食',
+                    desc: '荷兰优质淡奶，奶香浓而不腻',
+                    address: '上海市普陀区真北路',
+                    shop: '王小虎夫妻店',
+                    shopId: '10333'
+                }, {
+                    id: '12987126',
+                    name: '好滋好味鸡蛋仔',
+                    category: '江浙小吃、小吃零食',
+                    desc: '荷兰优质淡奶，奶香浓而不腻',
+                    address: '上海市普陀区真北路',
+                    shop: '王小虎夫妻店',
+                    shopId: '10333'
+                }],
+                dialogTableVisible: false,
+                dialogFormVisible: false,
+                form: {
+                    name: '',
+                    region: '',
+                    date1: '',
+                    date2: '',
+                    delivery: false,
+                    type: [],
+                    resource: '',
+                    desc: ''
+                },
+                formLabelWidth: '120px',
+                formInline: {
+                    user: '',
+                    region: ''
+                },
+
+            }
+        }
+    })
+
+</script>
+</body>
+</html>

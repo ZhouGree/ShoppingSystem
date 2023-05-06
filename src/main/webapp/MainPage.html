@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MainPage</title>
+    <style>
+        .el-header, .el-footer {
+            background-color: #B3C0D1;
+            color: #333;
+            text-align: center;
+            line-height: 60px;
+        }
+
+        .el-aside {
+            background-color: #D3DCE6;
+            color: #333;
+            text-align: center;
+            line-height: 200px;
+        }
+
+        .el-main {
+            background-color: #E9EEF3;
+            color: #333;
+            text-align: center;
+            line-height: 160px;
+        }
+
+        body > .el-container {
+            margin-bottom: 40px;
+        }
+
+        .el-container:nth-child(5) .el-aside,
+        .el-container:nth-child(6) .el-aside {
+            line-height: 260px;
+        }
+
+        .el-container:nth-child(7) .el-aside {
+            line-height: 320px;
+        }
+
+        .el-menu-vertical-demo:not(.el-menu--collapse) {
+            width: 200px;
+            min-height: 400px;
+        }
+    </style>
+</head>
+
+<body>
+<div id="app" >
+
+    <el-container style = "height: 880px">
+        <el-header><template>
+
+            <div class="demo-type">
+                <div>
+                    <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                </div>
+            </div>
+
+        </template>
+        </el-header>
+        <el-container>
+            <el-aside width="200px">
+
+                </el-menu>
+            </el-aside>
+            <el-container>
+                <el-main>
+
+
+                    <template>
+                        <el-tabs :tab-position="tabPosition" >
+                            <el-tab-pane label="个人信息">
+                                <el-descriptions class="margin-top" v-model="MainData" title="个人信息" :column="1" :size="size" border>
+                                    <template slot="extra">
+                                        <el-button type="primary" size="small"  @click="dialogDetail = true">修改</el-button>
+                                    </template>
+                                    <el-descriptions-item>
+                                        <template slot="label">
+                                            <i class="el-icon-user" prop="username"></i>
+                                            用户名
+                                        </template>
+                                        {{MainData.username}}
+                                    </el-descriptions-item>
+                                    <el-descriptions-item>
+                                        <template slot="label">
+                                            <i class="el-icon-mobile-phone" prop="phone"></i>
+                                            手机号
+                                        </template>
+                                        {{MainData.phone}}
+                                    </el-descriptions-item>
+                                </el-descriptions>
+                                </el-descriptions>
+                                <el-descriptions title="详细信息" v-model="DetailData" direction="vertical" :column="1" border>
+                                    <el-descriptions-item label="实名" prop="autonym"> {{DetailData.autonym}}</el-descriptions-item>
+                                    <el-descriptions-item label="邮箱" prop="mail"> {{DetailData.mail}}</el-descriptions-item>
+                                    <el-descriptions-item label="个性签名" :span="2" prop="signature">{{DetailData.signature}} </el-descriptions-item>
+                                    <el-descriptions-item label="联系地址" prop="address"> {{DetailData.address}}</el-descriptions-item>
+                                </el-descriptions>
+                            </el-tab-pane>
+                            <el-tab-pane label="我的订单">
+                                <template>
+                                    <el-row>
+                                        <el-button icon="el-icon-search" circle @click="ShowOrder"></el-button>
+                                    </el-row>
+                                    <el-table
+                                            ref="multipleTable"
+                                            :data="tableData"
+                                            tooltip-effect="dark"
+                                            style="width: 100%"
+                                            @selection-change="handleSelectionChange">
+                                        <el-table-column
+                                                type="selection"
+                                                width="55">
+                                        </el-table-column>
+
+                                        <el-table-column
+                                                prop="id"
+                                                align="center"
+                                                label="商品id"
+                                                width="50">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="commodityimage"
+                                                align="center"
+                                                label="商品图片"
+                                                width="180">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="commodityname"
+                                                align="center"
+                                                label="商品名称"
+                                                width="180">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="price"
+                                                align="center"
+                                                label="商品价格"
+                                                width="60">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="storename"
+                                                align="center"
+                                                label="店家"
+                                                width="180">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="status"
+                                                align="center"
+                                                label="状态"
+                                                width="60">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="operation"
+                                                align="center"
+                                                label="操作"
+                                        >
+                                            <el-button type="text" @click="deleteOrders(scope.row.id)">删除</el-button>
+                                        </el-table-column>
+                                    </el-table>
+                                    <div style="margin-top: 20px">
+                                        <el-button @click="toggleSelection()">删除</el-button>
+                                    </div>
+                                </template>
+
+                            </el-tab-pane>
+                            <el-tab-pane label="我的购物车" >
+
+                                <template slot-scope="scope">
+                                    <el-row>
+                                        <el-button icon="el-icon-search" circle @click="ShowCart"></el-button>
+                                    </el-row>
+                                    <el-table
+                                            ref="multipleTable"
+                                            :data="cartData"
+                                            tooltip-effect="dark"
+                                            style="width: 100%"
+                                            @selection-change="handleSelectionChange">
+                                        <el-table-column
+                                                type="selection"
+                                                width="55">
+                                        </el-table-column>
+
+                                        <el-table-column
+                                                prop="id"
+                                                align="center"
+                                                label="商品id"
+                                                width="50">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="commodityimage"
+                                                align="center"
+                                                label="商品图片"
+                                                width="180">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="commodityname"
+                                                align="center"
+                                                label="商品名称"
+                                                width="180">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="price"
+                                                align="center"
+                                                label="商品价格"
+                                                width="60">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="storename"
+                                                align="center"
+                                                label="店家"
+                                                width="180">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="operation"
+                                                align="center"
+                                                label="操作"
+                                        >
+                                            <el-button type="text">购买</el-button>
+                                            <el-button type="text" @click="deleteCart(scope.row.id)">删除</el-button>
+                                        </el-table-column>
+                                    </el-table>
+                                    <div style="margin-top: 20px">
+                                        <el-button @click="toggleSelection()">删除</el-button>
+<!--                                        <el-button @click="delete()">删除</el-button>-->
+<!--                                        <el-button @click="buy()">购买</el-button>-->
+                                    </div>
+                                </template>
+                            </el-tab-pane>
+                            <el-tab-pane label="我的店铺">
+                                <template>
+                                    <el-row>
+                                        <el-button icon="el-icon-search" circle @click="ShowStore"></el-button>
+                                    </el-row>
+                                    <el-table
+                                            ref="multipleTable"
+                                            :data="storeData"
+                                            tooltip-effect="dark"
+                                            style="width: 100%"
+                                            @selection-change="handleSelectionChange">
+                                        <el-table-column
+                                                type="selection"
+                                                width="55">
+                                        </el-table-column>
+
+                                        <el-table-column
+                                                prop="id"
+                                                align="center"
+                                                label="商品id"
+                                                width="50">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="commodityimage"
+                                                align="center"
+                                                label="商品图片"
+                                                width="180">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="commodityname"
+                                                align="center"
+                                                label="商品名称"
+                                                width="180">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="price"
+                                                align="center"
+                                                label="商品价格"
+                                                width="60">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="description"
+                                                align="center"
+                                                label="详情"
+                                                width="180">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="repertory"
+                                                align="center"
+                                                label="库存"
+                                                width="60">
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="operation"
+                                                align="center"
+                                                label="操作"
+                                        >
+                                            <el-button type="text" >删除</el-button>
+                                        </el-table-column>
+                                    </el-table>
+                                    <div style="margin-top: 20px">
+                                        <el-button @click="toggleSelection()">删除</el-button>
+                                        <el-button type="text" @click="addForm">添加</el-button>
+<!--                                        <el-button @click="delete()">删除</el-button>-->
+<!--                                        <el-button @click="buy()">购买</el-button>-->
+                                    </div>
+                                </template>
+                            </el-tab-pane>
+                        </el-tabs>
+                    </template>
+
+
+                </el-main>
+                <el-footer>
+                    <el-row>
+                    <el-button type="text" @click="logout">退出登录</el-button>
+                    <el-button type="text" @click="logoff">注销账号</el-button>
+                        <el-button type="text"  @click="dialogMain = true">修改账号</el-button>
+                </el-row>
+                </el-footer>
+            </el-container>
+        </el-container>
+    </el-container>
+<!--修改详细信息-->
+    <el-dialog
+            title="修改详细信息"
+            :visible.sync="dialogDetail"
+            width="30%"
+            :before-close="detailClose">
+        <el-form ref="DetailForm" :model="form" label-width="80px">
+            <el-form-item label="实名">
+                <el-input v-model="form.autonym"></el-input>
+            </el-form-item>
+            <el-form-item label="邮箱">
+                <el-input v-model="form.mail"></el-input>
+            </el-form-item>
+            <el-form-item label="个性签名">
+                <el-input v-model="form.signature"></el-input>
+            </el-form-item>
+            <el-form-item label="地址">
+                <el-input v-model="form.address"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="EditDetailUser">立即创建</el-button>
+                <el-button @click="dialogDetail = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+  </span>
+    </el-dialog>
+<!--    修改主要信息-->
+    <el-dialog
+            title="修改账号信息"
+            :visible.sync="dialogMain"
+            width="30%"
+            :before-close="detailClose">
+        <el-form ref="form" :model="form" label-width="80px">
+            <el-form-item label="账号名">
+                <el-input v-model="form.username"></el-input>
+            </el-form-item>
+            <el-form-item label="密码">
+                <el-input v-model="form.password"></el-input>
+            </el-form-item>
+            <el-form-item label="手机号码">
+                <el-input v-model="form.phone"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="EditMainUser">立即创建</el-button>
+                <el-button @click="dialogMain = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+  </span>
+    </el-dialog>
+
+</div>
+
+<script src = "js/axios.js"></script>
+<script src = "element/vue.js"></script>
+<script src="element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+<script>
+    new Vue({
+        mounted(){
+            this.ShowMain();
+            this.ShowDetail();
+            // this.ShowOrder();
+            // this.ShowCart();
+            // this.ShowStore();
+        },
+        el: "#app",
+
+        methods: {
+            toggleSelection(rows) {
+                if (rows) {
+                    rows.forEach(row => {
+                        this.$refs.multipleTable.toggleRowSelection(row);
+                    });
+                } else {
+                    this.$refs.multipleTable.clearSelection();
+                }
+            },
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+            },
+            detailClose(done) {
+                this.$confirm('确认关闭？')
+                    .then(_ => {
+                        done();
+                    })
+                    .catch(_ => {});
+            },
+            logout(){
+                axios({
+                    method:"get",
+                    url:"http://localhost:8080/ShoppingSystem/user/logout",
+                    data:''
+                }).then(function () {
+                    setTimeout(function () {
+                        location.href="index.html"
+                    },1000)
+                })
+            },
+            logoff() {
+                axios({
+                    method:"get",
+                    url:"http://localhost:8080/ShoppingSystem/user/Logoff",
+                    data:''
+                }).then(function () {
+                    setTimeout(function () {
+                        location.href="index.html"
+                    },1000)
+                })
+            },
+            EditDetailUser() {
+                var _this = this;
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/ShoppingSystem/user/EditDetailUser",
+                    data:_this.form
+                }).then(function (respone) {
+                    if( respone.data.flag===true){
+
+                    }else {
+                        alert("操作失败，请稍后重试！")
+                    }
+                })
+            },
+            EditMainUser() {
+                var _this = this;
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/ShoppingSystem/user/EditMainUser",
+                    data:_this.MainForm
+                }).then(function (respone) {
+                    if( respone.data.flag===true){
+
+                    }else {
+                        alert("操作失败，请稍后重试！")
+                    }
+                })
+            },
+            ShowDetail(){
+                var _this = this;
+                axios({
+                    method:"get",
+                    url:"http://localhost:8080/ShoppingSystem/user/FindDetailUser",
+                }).then(function (respone) {
+                    if( respone.data.flag===true){
+                       _this.DetailData = respone.data.data;
+                    }else {
+                        alert("操作失败，请稍后重试！")
+                    }
+                })
+            },
+            ShowMain(){
+                var _this = this;
+                axios({
+                    method:"get",
+                    url:"http://localhost:8080/ShoppingSystem/user/FindMainUser",
+                }).then(function (respone) {
+                    if( respone.data.flag===true){
+                        _this.MainData = respone.data.data;
+                    }else {
+                        alert("操作失败，请稍后重试！")
+                    }
+                })
+            },
+            ShowOrder(){
+                var _this = this;
+                axios({
+                    method:"get",
+                    url:"http://localhost:8080/ShoppingSystem/order/ShowOrders",
+                }).then(function (respone) {
+                    if( respone.data.flag===true){
+                        _this.ordersData = respone.data.data;
+                    }else {
+                        alert("操作失败，请稍后重试！")
+                    }
+                })
+            },
+            ShowCart(){
+                var _this = this;
+                axios({
+                    method:"get",
+                    url:"http://localhost:8080/ShoppingSystem/cart/ShowCart",
+                }).then(function (respone) {
+                    if( respone.data.flag===true){
+                        _this.cartData = respone.data.data;
+                    }else {
+                        alert("操作失败，请稍后重试！")
+                    }
+                })
+            },
+            ShowStore(){
+                var _this = this;
+                axios({
+                    method:"get",
+                    url:"http://localhost:8080/ShoppingSystem/store/QueryAllCommodity",
+                }).then(function (respone) {
+                    if( respone.data.flag===true){
+                        _this.storeData = respone.data.data;
+                    }else {
+                        alert("操作失败，请稍后重试！")
+                    }
+                })
+            },
+            deleteOrders(id){
+                var _this = this;
+                _this.CommodityId.storing_id = id;
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/ShoppingSystem/order/Delete",
+                    data:_this.CommodityId
+                }).then(function (respone) {
+                    if( respone.data.flag===true){
+
+                    }else {
+                        alert("操作失败，请稍后重试！")
+                    }
+                })
+            },
+            deleteCart(id){
+                var _this = this;
+                _this.CommodityId.storing_id = id;
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/ShoppingSystem/cart/RemoveCart",
+                    data:_this.CommodityId
+                }).then(function (respone) {
+                    if( respone.data.flag===true){
+
+                    }else {
+                        alert("操作失败，请稍后重试！")
+                    }
+                })
+            }
+        },
+        data() {
+            return {
+                labelPosition: 'right',
+                tabPosition: 'left',
+                drawer: false,
+                direction: 'rtl',
+                isCollapse: true,
+                dialogDetail: false,
+                form: {
+                    autonym: '',
+                    mail: '',
+                    signature: '',
+                    address: ''
+                },
+                dialogMain: false,
+                MainForm: {
+                    username: '',
+                    password: '',
+                    phone: ''
+                },
+                DetailData:{
+                    autonym:"",
+                    mail:"",
+                    signature:"",
+                    address:""
+                },
+                MainData:{
+                    username:"",
+                    password:""
+                },
+                ordersData:{
+                    id:"",
+                    commodityimage:"",
+                    commodityname:"",
+                    price:"",
+                    storename:"",
+                    status:""
+                },
+                cartData:{
+                    id:"",
+                    commodityimage:"",
+                    commodityname:"",
+                    price:"",
+                    storename:"",
+                },
+                storeData:{
+                    id:"",
+                    commodityimage:"",
+                    commodityname:"",
+                    price:"",
+                    description:"",
+                    repertory:""
+                },
+                CommodityId:{
+                    storing_id:""
+                }
+            }
+        }
+    })
+
+</script>
+</body>
+</html>
