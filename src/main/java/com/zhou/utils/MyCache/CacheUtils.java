@@ -3,6 +3,7 @@ package com.zhou.utils.MyCache;
 import com.zhou.po.MyCache.MyCache;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -10,7 +11,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * Cache全局类
  */
-public class CacheUtils {
+public class CacheUtils<T> {
+
     //全局缓存对象
     public final static Map<String, MyCache>[] concurrentMaps = new ConcurrentHashMap[11];
    static {
@@ -21,19 +23,20 @@ public class CacheUtils {
 
     public static Map<String, MyCache> getCaCheMap(String name){
        int index = Math.abs(name.hashCode() % concurrentMaps.length);
+       System.out.println(index);
        return concurrentMaps[index];
     }
 
     public static Object getCache(String cacheName, String key){
        Map<String,MyCache> cacheMap = getCaCheMap(cacheName);
        if(cacheMap.containsKey(key)){
-           return cacheMap.get(key).getValue();
+           return cacheMap.get(key).getValues();
        }else {
            return null;
        }
     }
 
-    public static void put(String cacheName, String key, Map<String, Object> value, long expire){
+    public static void put(String cacheName, String key, Object value, long expire){
        Map<String, MyCache> cacheMap = getCaCheMap(cacheName);
        //非空判断
         if(StringUtils.isBlank(key))
@@ -45,29 +48,33 @@ public class CacheUtils {
             cache.setWriteTime(System.currentTimeMillis());
             cache.setLastTime(System.currentTimeMillis());
             cache.setExpireTime(expire);
-            cache.setValue(value);
+            cache.setValues(value);
+            ObjectSerialization serialization = new ObjectSerialization();
+            serialization.Serialization(cacheMap, key);
             return;
         }
         //创建缓存
         MyCache cache = new MyCache();
         cache.setKey(key);
-        cache.setValue(value);
+        cache.setValues(value);
         cache.setWriteTime(System.currentTimeMillis());
         cache.setLastTime(System.currentTimeMillis());
         cache.setHitCount(1);
         cache.setExpireTime(expire);
         cacheMap.put(key, cache);
+        ObjectSerialization serialization = new ObjectSerialization();
+        serialization.Serialization(cacheMap, key);
     }
 
     public static void removeCache(String cacheNme, String key){
        Map<String, MyCache> cacheMap = getCaCheMap(cacheNme);
-       if(cacheMap.containsKey(key)){
-           cacheMap.remove(key);
-       }
+        cacheMap.remove(key);
     }
 
-    public static Map<String, Object> get(String key, String cacheName){
+    public static Object get(String key, String cacheName){
         Map<String, MyCache> cacheMap = getCaCheMap(cacheName);
+        ObjectSerialization serialization = new ObjectSerialization();
+        serialization.Read(cacheMap, key);
         //非空判断
         if(StringUtils.isBlank(key))
             return null;
@@ -90,10 +97,13 @@ public class CacheUtils {
         if(cache.getExpireTime() <= timeOutTime){
             //清除过期缓存
             cacheMap.remove(key);
+            String fileName = "D:/5/" + key + ".txt";
+            File file = new File(fileName);
+            file.delete();
             return null;
         }
         cache.setHitCount(cache.getHitCount() + 1);
         cache.setLastTime(System.currentTimeMillis());
-        return cache.getValue();
+        return cache.getValues();
     }
 }

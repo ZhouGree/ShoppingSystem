@@ -2,6 +2,7 @@ package com.zhou.utils.MyCache;
 
 import com.zhou.po.MyCache.MyCache;
 
+import java.io.File;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -47,6 +48,9 @@ public class ExpireTread implements Runnable {
             }
             //清除过期缓存
             cacheMap.remove(key);
+            String fileName = "D:/5/" + key + ".txt";
+            File file = new File(fileName);
+            file.delete();
         }
     }
 }

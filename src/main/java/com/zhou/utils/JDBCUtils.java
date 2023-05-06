@@ -67,7 +67,7 @@ public class JDBCUtils extends ArrayList<Object> {
                         map.put(resultSetMetaData.getColumnLabel(i), resultSet.getObject(i));
                     }
                     resultList.add(map);
-            }
+                }
                 close(resultSet, preparedStatement, connection);
                 return resultList;
             } catch (SQLException throwables) {

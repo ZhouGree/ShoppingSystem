@@ -12,6 +12,15 @@ public class Store {
     private String picture;
     private float score;
     private Integer status;
+    private long sales;
+
+    public long getSales() {
+        return sales;
+    }
+
+    public void setSales(long sales) {
+        this.sales = sales;
+    }
 
     public Integer getId() {
         return id;
@@ -70,6 +79,7 @@ public class Store {
                 ", picture='" + picture + '\'' +
                 ", score=" + score +
                 ", status=" + status +
+                ", sales=" + sales +
                 '}';
     }
 

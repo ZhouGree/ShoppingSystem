@@ -3,13 +3,12 @@ package com.zhou.service.Impl;
 import com.zhou.constant.Constant;
 import com.zhou.dao.Impl.Entity.DetailUserDaoImpl;
 import com.zhou.dao.Impl.Entity.MainUserDaoImpl;
-import com.zhou.dao.Impl.Entity.Relate.FollowDaoImpl;
-import com.zhou.dao.Impl.Entity.Relate.TipOffDaoImpl;
-import com.zhou.po.DetailUser;
+import com.zhou.dao.Impl.Relate.FollowDaoImpl;
+import com.zhou.dao.Impl.Relate.TipOffDaoImpl;
 import com.zhou.po.MainUser;
-import com.zhou.po.follow;
 import com.zhou.service.UserService;
 import com.zhou.utils.MyCache.CacheUtils;
+import com.zhou.utils.MyCache.ExpireTread;
 
 import java.util.*;
 
@@ -26,8 +25,13 @@ public class UserServiceImpl implements UserService, Constant {
     public MainUser login(Map<String, Object> MainUserMap) {
         if(MainUserMap == null || !MainUserMap.containsKey("username") || !MainUserMap.containsKey("password")) return null;
         //先判断本地缓存是否存在
-        CacheUtils cacheUtils = new CacheUtils();
-
+//        //创建ExpiredThread线程对象
+//        Thread expireTread = new Thread(new ExpireTread("UserCache"));
+//        //启动线程
+//        expireTread.start();
+//        Object result = CacheUtils.get((String) MainUserMap.get("username"), "UserCache");
+//        MainUser user = (MainUser) result;
+//        if(user!=null) return user;
         //不存在 去数据库取数据，并存到本地缓存
         Map<String, Object> map = new HashMap<>();
         //判断用账号登录还是用手机号码登录
@@ -35,6 +39,9 @@ public class UserServiceImpl implements UserService, Constant {
             map.put("phone", MainUserMap.get("username"));
         }else map.put("username", MainUserMap.get("username"));
         map.put("password", MainUserMap.get("password"));
+        //只有账号和密码都对才能查询到该信息
+
+//        CacheUtils.put("CartCache", user.getUsername(), user, 60*60*24*7);
         return mainUserDao.getByName(map, EXISTENCE);
     }
 
@@ -46,7 +53,9 @@ public class UserServiceImpl implements UserService, Constant {
     @Override
     public MainUser register(Map<String, Object> MainUserMap) {
         if(MainUserMap == null || !MainUserMap.containsKey("password") || !MainUserMap.containsKey("username") || !MainUserMap.containsKey("phone")) return null;
-        MainUser user = mainUserDao.getByName(MainUserMap, NONEXISTENCE);
+        Map<String, Object> map = new HashMap<>();
+        map.put("username", MainUserMap.get("username"));
+        MainUser user = mainUserDao.getByName(map, NONEXISTENCE);
         if(user == null){
             int count = mainUserDao.insert(MainUserMap);
             if (count != 0){
@@ -56,13 +65,11 @@ public class UserServiceImpl implements UserService, Constant {
             return user;
         }else {
             if (!user.isStatus()) {
-                Map<String, Object> dataMap = new HashMap<>();
+                MainUserMap.remove("username");
+                MainUserMap.put("status", EXISTENCE);
                 Map<String, Object> ifMap = new HashMap<>();
-                dataMap.put("status", true);
-                dataMap.put("phone", user.getPhone());
-                dataMap.put("password", user.getPassword());
                 ifMap.put("id", user.getId());
-                if ( !mainUserDao.update(dataMap, ifMap) ) return null;
+                if ( !mainUserDao.update(MainUserMap, ifMap) ) return null;
                 return user;
             }
         }

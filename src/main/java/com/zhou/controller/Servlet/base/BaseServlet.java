@@ -1,19 +1,19 @@
-package com.zhou.comtroller.Servlet.base;
+package com.zhou.controller.Servlet.base;
 
 
 import com.alibaba.fastjson.JSON;
-import com.zhou.po.result.ResultInfo;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.ObjectStreamClass;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 
-//@WebServlet("/baseServlet")
+@WebServlet("/baseServlet")
 public class BaseServlet extends HttpServlet {
 
    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException {
@@ -45,10 +45,14 @@ public class BaseServlet extends HttpServlet {
    }
 
    public void writeValue(Object object, HttpServletResponse response){
+       response.setCharacterEncoding("GBK");
        String json = JSON.toJSONString(object);
-       response.setContentType("text/json;charset=utf-8");
+       response.setContentType("application/json;charset=utf-8");
        try {
-           response.getWriter().write(json);
+           PrintWriter out = response.getWriter();
+           out.print(json);
+           out.flush();
+           out.close();
        } catch (IOException e) {
            e.printStackTrace();
        }

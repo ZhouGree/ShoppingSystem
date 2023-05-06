@@ -11,30 +11,34 @@ public class Sql {
         if (DataMap == null || sql.isEmpty()) return null;
         int count = 0;
         Set<Map.Entry<String, Object>> entrySet = DataMap.entrySet();
+        StringBuilder sqlBuilder = new StringBuilder(sql);
         for (Map.Entry<String, Object> entry : entrySet){
             count++;
             if(count == 1) {
-                sql = sql + entry.getKey() + " = ? ";
+                sqlBuilder.append(entry.getKey()).append(" = ? ");
             } else {
-                sql = sql + " and " + entry.getKey() + " = ? ";
+                sqlBuilder.append(" and ").append(entry.getKey()).append(" = ? ");
             }
             list.add(entry.getValue());
         }
+        sql = sqlBuilder.toString();
         return sql;
     }
     public String Delete(Map<String, Object> DataMap, String sql, List<Object> list ){
         if (DataMap == null || sql.isEmpty()) return null;
         int count = 0;
         Set<Map.Entry<String, Object>> entrySet = DataMap.entrySet();
+        StringBuilder sqlBuilder = new StringBuilder(sql);
         for (Map.Entry<String, Object> entry : entrySet){
             count++;
             if(count == 1) {
-                sql = sql + entry.getKey() + " = ? ";
+                sqlBuilder.append(entry.getKey()).append(" = ? ");
             } else {
-                sql = sql + " and " + entry.getKey() + " = ? ";
+                sqlBuilder.append(" and ").append(entry.getKey()).append(" = ? ");
             }
             list.add(entry.getValue());
         }
+        sql = sqlBuilder.toString();
         return sql;
     }
 
@@ -42,26 +46,31 @@ public class Sql {
         if (DataMap == null ) return null;
         int count = 0;
         Set<Map.Entry<String, Object>> entrySet = DataMap.entrySet();
+        StringBuilder sqlBuilder = new StringBuilder(sql);
         for (Map.Entry<String, Object> entry : entrySet){
             count++;
             if(count == 1) {
-                sql = sql + entry.getKey() + " = ? ";
+                sqlBuilder.append(entry.getKey()).append(" = ? ");
             }
             else {
-                sql = sql + ", " + entry.getKey() + " = ? ";
+                sqlBuilder.append(", ").append(entry.getKey()).append(" = ? ");
             }
            list.add(entry.getValue());
         }
+        sql = sqlBuilder.toString();
+        count = 0;
         entrySet = IfMap.entrySet();
+        StringBuilder sql1Builder = new StringBuilder(sql1);
         for (Map.Entry<String, Object> entry : entrySet){
             count++;
             if(count == 1) {
-                sql1 = sql1 + entry.getKey() + " = ? ";
+                sql1Builder.append(entry.getKey()).append(" = ? ");
             } else {
-                sql1 = sql1 + " and " + entry.getKey() + " = ? ";
+                sql1Builder.append(" and ").append(entry.getKey()).append(" = ? ");
             }
             list.add(entry.getValue());
         }
+        sql1 = sql1Builder.toString();
         sql = sql + sql1;
         return sql;
     }
@@ -70,32 +79,38 @@ public class Sql {
         if (DataMap == null) return null;
         int count = 0;
         Set<Map.Entry<String, Object>> entrySet = DataMap.entrySet();
+        StringBuilder sqlBuilder = new StringBuilder(sql);
+        StringBuilder sql1Builder = new StringBuilder(sql1);
         for (Map.Entry<String, Object> entry : entrySet){
             count++;
             if(count == 1) {
-                sql = sql + entry.getKey();
+                sqlBuilder.append(entry.getKey());
             }
             else {
-                sql = sql + ", " + entry.getKey();
-                sql1 = sql1 + ", ? ";
+                sqlBuilder.append(", ").append(entry.getKey());
+                sql1Builder.append(", ? ");
             }
             list.add(entry.getValue());
         }
+        sql1 = sql1Builder.toString();
+        sql = sqlBuilder.toString();
         sql = sql + " ) " + sql1 + " )";
         return sql;
     }
     public String SS(List<Object> list,Map<String, Object> DataMap, String sql ){
         int count = 0;
         Set<Map.Entry<String, Object>> entrySet = DataMap.entrySet();
+        StringBuilder sqlBuilder = new StringBuilder(sql);
         for (Map.Entry<String, Object> entry : entrySet){
             count++;
             if(count == 1) {
-                sql = sql + entry.getKey() + " = ? ";
+                sqlBuilder.append(entry.getKey()).append(" = ? ");
             } else {
-                sql = sql + " and " + entry.getKey() + " = ? ";
+                sqlBuilder.append(" and ").append(entry.getKey()).append(" = ? ");
             }
             list.add(entry.getValue());
         }
+        sql = sqlBuilder.toString();
         return sql;
     }
 }

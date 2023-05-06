@@ -1,9 +1,10 @@
 package com.zhou.po;
 
 import javax.swing.*;
+import java.io.Serializable;
 import java.util.Objects;
 
-public class MainUser {
+public class MainUser implements Serializable {
     /**
      * 主要信息
      */

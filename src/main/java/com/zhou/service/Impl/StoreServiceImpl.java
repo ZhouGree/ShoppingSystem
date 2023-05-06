@@ -142,8 +142,8 @@ public class StoreServiceImpl implements StoreService, Constant {
 
     @Override
     public List<Store> queryAll(Map<String, Object> map) {
-
-        return null;
+        if(map==null) return null;
+        return storeDao.getAll(map);
     }
 
     public boolean SetStatus(Map<String, Object> map, int Status) {

@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * 缓存实体类
  */
-public class MyCache implements Comparable<MyCache>, Serializable {
+public class MyCache<T> implements Comparable<MyCache>, Serializable {
     @Override
     public int compareTo(MyCache o) {
         return hitCount.compareTo(o.hitCount);
@@ -16,7 +16,7 @@ public class MyCache implements Comparable<MyCache>, Serializable {
     //缓存键
     private Object key;
     //缓存值
-    private Map<String, Object> value;
+    private T values;
     //最后访问时间
     private long lastTime;
     //创建时间
@@ -34,12 +34,12 @@ public class MyCache implements Comparable<MyCache>, Serializable {
         this.key = key;
     }
 
-    public Map<String, Object> getValue() {
-        return value;
+    public T getValues() {
+        return values;
     }
 
-    public void setValue(Map<String, Object> value) {
-        this.value = value;
+    public void setValues(T values) {
+        this.values = values;
     }
 
     public long getLastTime() {

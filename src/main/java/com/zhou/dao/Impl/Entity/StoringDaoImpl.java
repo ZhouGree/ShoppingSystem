@@ -24,24 +24,38 @@ public class StoringDaoImpl implements GenericDao<storing> {
        storing.setSales((Long) StoringMap.get("sales"));
        storing.setStore_id((Integer) StoringMap.get("store_id"));
        storing.setStatus((Integer) StoringMap.get("status"));
+       storing.setCommodityname((String) StoringMap.get("commodityname"));
+       storing.setStorename((String) StoringMap.get("storename"));
        return storing;
    }
 
     @Override
     public storing getByName(Map<String, Object> StoringMap, int Status) {
-        String sql = "select * from storing where status <> 0";
-        if(Status == 0) sql = "select * from storing where status = 0 and ";
-        List<Object> list = new ArrayList<>();
-        sql = SQL.Select(StoringMap, sql, list);
-        List<Map<String, Object>> mapList = jdbcUtils.queryALL(sql, list.toArray());
-        return pack(mapList.get(0));
+       return null;
     }
-
+    public List<storing> getName(Map<String, Object> StoringMap, int Status){
+        List<storing> StoringList = new ArrayList<>();
+        if(StoringMap.get("id") != null){
+            String sql = "select * from storing where status = ? and id = ?";
+            List<Map<String, Object>> mapList = jdbcUtils.queryALL(sql, new Object[]{Status,StoringMap.get("id")});
+            for (Map<String, Object> map : mapList) {
+                StoringList.add(pack(map));
+            }
+            return StoringList;
+        }else {
+            String sql = "select * from storing where status = ? and commodityname = ?";
+            List<Map<String, Object>> mapList = jdbcUtils.queryALL(sql, new Object[]{Status,StoringMap.get("commodityname")});
+            for (Map<String, Object> map : mapList) {
+                StoringList.add(pack(map));
+            }
+            return StoringList;
+        }
+    }
     @Override
     public List<storing> getAll(Map<String, Object> StoringMap) {
        if(StoringMap == null || !StoringMap.containsKey("status")) return null;
-        List<Map<String, Object>> mapList = null;
-        if(StoringMap.containsKey("store_id")){
+        List<Map<String, Object>> mapList = new ArrayList<>();
+        if(StoringMap.get("store_id") == null){
             String sql = "select * from storing where status = ? " ;
             mapList = jdbcUtils.queryALL(sql,new Object[]{StoringMap.get("status")});
         }else {

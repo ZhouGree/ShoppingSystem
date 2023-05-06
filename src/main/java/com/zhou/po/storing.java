@@ -12,6 +12,8 @@ public class storing {
     private String picture;
     private String description;
     private int price;
+    private String commodityname;
+    private String storename;
 
     public Integer getId() {
         return id;
@@ -85,6 +87,22 @@ public class storing {
         this.price = price;
     }
 
+    public String getCommodityname() {
+        return commodityname;
+    }
+
+    public void setCommodityname(String commodityname) {
+        this.commodityname = commodityname;
+    }
+
+    public String getStorename() {
+        return storename;
+    }
+
+    public void setStorename(String storename) {
+        this.storename = storename;
+    }
+
     @Override
     public String toString() {
         return "storing{" +
@@ -97,6 +115,8 @@ public class storing {
                 ", picture='" + picture + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +
+                ", commodityname='" + commodityname + '\'' +
+                ", storename='" + storename + '\'' +
                 '}';
     }
 

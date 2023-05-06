@@ -38,6 +38,12 @@ public class DetailUserDaoImpl implements GenericDao<DetailUser> {
     public DetailUser getByName(Integer UserId) {
         String sql = "select * from detailuser where id = ?";
         List<Map<String, Object>> mapList = jdbcUtils.queryALL(sql, new Object[]{UserId});
+        if(mapList==null){
+            insertId(UserId);
+            DetailUser user = new DetailUser();
+            user.setId(UserId);
+            return user;
+        }
         return pack(mapList.get(0));
     }
     @Override
@@ -58,8 +64,8 @@ public class DetailUserDaoImpl implements GenericDao<DetailUser> {
         return 0;
     }
     public int insertId(Integer UserId){
-       String sql = "insert into detaiuser ( id ) values ( ? )";
-       return jdbcUtils.UpData(sql, new Object[]{UserId});
+       String sql = "insert into detailuser ( id, mainuser_id , autonym ) values ( ?, ?, ? )";
+       return jdbcUtils.UpData(sql, new Object[]{UserId, UserId, "编辑" });
     }
     public int insert(Integer UserId){
        String sql = "insert into detailuser ( id ) values ( ?)";
